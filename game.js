@@ -47,8 +47,8 @@
     let yCoordPlusMotionRate = y + dy;
     // this clears the frame
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawPaddle();
     drawBall();
+    drawPaddle();
 
     x = xCoordPlusMotionRate;
     y = yCoordPlusMotionRate;
@@ -57,6 +57,12 @@
     }
     if (yCoordPlusMotionRate > canvas.height - ballRadius || yCoordPlusMotionRate < ballRadius) {
       dy = -dy;
+    }
+
+    if (rightPressed && paddleX < canvas.width - paddleWidth) {
+      paddleX += 7;
+    } else if (leftPressed && paddleX > 0) {
+      paddleX -= 7;
     }
 
   };
