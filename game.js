@@ -34,8 +34,10 @@
   let brickOffsetTop = 30;
   let brickOffsetLeft = 30;
   let bricks = [];
+  console.log(bricks);
   bricks.map(function (c) {
-    c = [];
+    c.push([]);
+    console.log('somethin');
     c.map(function (r) {
       r = {
         x: 0,
@@ -56,10 +58,12 @@
   let drawBricks = function () {
     bricks.map(function (c) {
       c.map(function (r) {
-        r.x = 0;
-        r.y = 0;
+        let brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
+        let brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
+        r.x = brickX;
+        r.y = brickY;
         drawSomething(function () {
-          ctx.rect(0, 0, brickWidth, brickHeight);
+          ctx.rect(brickX, brickY, brickWidth, brickHeight);
         });
       });
     });
@@ -86,6 +90,7 @@
     let yCoordPlusMotionRate = y + dy;
     // this clears the frame
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBricks();
     drawBall();
     drawPaddle();
 
