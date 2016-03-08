@@ -55,8 +55,15 @@
     if (xCoordPlusMotionRate > canvas.width - ballRadius || xCoordPlusMotionRate < ballRadius) {
       dx = -dx;
     }
-    if (yCoordPlusMotionRate > canvas.height - ballRadius || yCoordPlusMotionRate < ballRadius) {
+    if (yCoordPlusMotionRate < ballRadius) {
       dy = -dy;
+    } else if (yCoordPlusMotionRate > canvas.height - ballRadius) {
+      if (x > paddleX && x < paddleX + paddleWidth) {
+        dy = -dy;
+      } else {
+        alert("GAME OVER");
+        document.location.reload();
+      }
     }
 
     if (rightPressed && paddleX < canvas.width - paddleWidth) {
