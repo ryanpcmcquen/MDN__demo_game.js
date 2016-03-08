@@ -1,4 +1,5 @@
-/*jslint browser:true, white:true, es6:true*/
+/*global alert*/
+/*jslint browser:true, white:true, es6:true, devel:true*/
 (function () {
 
   'use strict';
@@ -6,16 +7,42 @@
   let canvas = document.getElementById("myCanvas");
   let ctx = canvas.getContext("2d");
 
+  // coordinates
   let x = canvas.width / 2;
   let y = canvas.height - 20;
   let dx = 2;
   let dy = -2;
+
+  // ball stuff
   let ballRadius = 10;
+
+  // paddle stuff
   let paddleHeight = 10;
   let paddleWidth = 75;
   let paddleX = (canvas.width - paddleWidth) / 2;
+
+  // control stuff
   let rightPressed = false;
   let leftPressed = false;
+
+  // bricks!
+  let brickRowCount = 3;
+  let brickColumnCount = 5;
+  let brickWidth = 75;
+  let brickHeight = 20;
+  let brickPadding = 10;
+  let brickOffsetTop = 30;
+  let brickOffsetLeft = 30;
+  let bricks = [];
+  bricks.map(function (c) {
+    c = [];
+    c.map(function (r) {
+      r = {
+        x: 0,
+        y: 0
+      };
+    });
+  });
 
   let drawSomething = function (shapeFunc, color) {
     color = color || "#0095dd";
@@ -24,6 +51,18 @@
     ctx.fillStyle = color;
     ctx.fill();
     ctx.closePath();
+  };
+
+  let drawBricks = function () {
+    bricks.map(function (c) {
+      c.map(function (r) {
+        r.x = 0;
+        r.y = 0;
+        drawSomething(function () {
+          ctx.rect(0, 0, brickWidth, brickHeight);
+        });
+      });
+    });
   };
 
   let drawBall = function () {
