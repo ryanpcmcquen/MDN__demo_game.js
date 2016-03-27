@@ -1,6 +1,6 @@
 /*global alert*/
 /*jslint browser:true, white:true, es6:true, devel:true*/
-(function() {
+(function () {
 
   'use strict';
 
@@ -44,7 +44,7 @@
 
   // set length of row array
   bricks[0].length = brickRowCount;
-  bricks.map(function(i) {
+  bricks.map(function (i) {
     i.fill({
         x: 0,
         y: 0
@@ -56,7 +56,7 @@
 
 
 
-  let drawSomething = function(shapeFunc, color) {
+  let drawSomething = function (shapeFunc, color) {
     color = color || "#0095dd";
     ctx.beginPath();
     shapeFunc();
@@ -65,37 +65,37 @@
     ctx.closePath();
   };
 
-  let drawBricks = function() {
-    bricks.map(function(c, i) {
-      let brickX = (i * (brickWidth + brickPadding)) + brickOffsetLeft;
-      c.map(function(r, i) {
-        let brickY = (i * (brickHeight + brickPadding)) + brickOffsetTop;
+  let drawBricks = function () {
+    bricks.map(function (c, columnIterator) {
+      let brickX = (columnIterator * (brickWidth + brickPadding)) + brickOffsetLeft;
+      c.map(function (r, rowIterator) {
+        let brickY = (rowIterator * (brickHeight + brickPadding)) + brickOffsetTop;
         r.x = brickX;
         r.y = brickY;
-        drawSomething(function() {
+        drawSomething(function () {
           ctx.rect(brickX, brickY, brickWidth, brickHeight);
         });
       });
     });
   };
 
-  let drawBall = function() {
+  let drawBall = function () {
     drawSomething(
-      function() {
+      function () {
         ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
       }
     );
   };
 
-  let drawPaddle = function() {
+  let drawPaddle = function () {
     drawSomething(
-      function() {
+      function () {
         ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
       }
     );
   };
 
-  let draw = function() {
+  let draw = function () {
     let xCoordPlusMotionRate = x + dx;
     let yCoordPlusMotionRate = y + dy;
     // this clears the frame
@@ -116,7 +116,9 @@
         dy = -dy;
       } else {
         document.body.innerHTML = "<h1 style='text-align: center;'>GAME OVER</h1>";
-        setTimeout(document.location.reload(), 300);
+        setTimeout(function () {
+          document.location.reload();
+        }, 700);
       }
     }
 
@@ -129,7 +131,7 @@
   };
 
 
-  let keyDownHandler = function(e) {
+  let keyDownHandler = function (e) {
     if (e.keyCode === 39) {
       rightPressed = true;
     } else if (e.keyCode === 37) {
@@ -137,7 +139,7 @@
     }
   };
 
-  let keyUpHandler = function(e) {
+  let keyUpHandler = function (e) {
     if (e.keyCode === 39) {
       rightPressed = false;
     } else if (e.keyCode === 37) {
