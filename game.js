@@ -1,6 +1,6 @@
 /*global alert*/
 /*jslint browser:true, white:true, es6:true, devel:true*/
-(function () {
+(function() {
 
   'use strict';
 
@@ -34,19 +34,29 @@
   let brickOffsetTop = 30;
   let brickOffsetLeft = 30;
   let bricks = [];
-  console.log(bricks);
-  bricks.map(function (c) {
-    c.push([]);
-    console.log('somethin');
-    c.map(function (r) {
-      r = {
+  // set length of column array
+  bricks.length = brickColumnCount;
+  bricks.fill(
+    [],
+    0,
+    brickColumnCount
+  );
+
+  // set length of row array
+  bricks[0].length = brickRowCount;
+  bricks.map(function(i) {
+    i.fill({
         x: 0,
         y: 0
-      };
-    });
+      },
+      0,
+      brickRowCount
+    );
   });
 
-  let drawSomething = function (shapeFunc, color) {
+
+
+  let drawSomething = function(shapeFunc, color) {
     color = color || "#0095dd";
     ctx.beginPath();
     shapeFunc();
@@ -55,37 +65,37 @@
     ctx.closePath();
   };
 
-  let drawBricks = function () {
-    bricks.map(function (c) {
-      c.map(function (r) {
-        let brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
-        let brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
+  let drawBricks = function() {
+    bricks.map(function(c, i) {
+      let brickX = (i * (brickWidth + brickPadding)) + brickOffsetLeft;
+      c.map(function(r, i) {
+        let brickY = (i * (brickHeight + brickPadding)) + brickOffsetTop;
         r.x = brickX;
         r.y = brickY;
-        drawSomething(function () {
+        drawSomething(function() {
           ctx.rect(brickX, brickY, brickWidth, brickHeight);
         });
       });
     });
   };
 
-  let drawBall = function () {
+  let drawBall = function() {
     drawSomething(
-      function () {
+      function() {
         ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
       }
     );
   };
 
-  let drawPaddle = function () {
+  let drawPaddle = function() {
     drawSomething(
-      function () {
+      function() {
         ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
       }
     );
   };
 
-  let draw = function () {
+  let draw = function() {
     let xCoordPlusMotionRate = x + dx;
     let yCoordPlusMotionRate = y + dy;
     // this clears the frame
@@ -105,8 +115,8 @@
       if (x > paddleX && x < paddleX + paddleWidth) {
         dy = -dy;
       } else {
-        alert("GAME OVER");
-        document.location.reload();
+        document.body.innerHTML = "<h1 style='text-align: center;'>GAME OVER</h1>";
+        setTimeout(document.location.reload(), 300);
       }
     }
 
@@ -119,7 +129,7 @@
   };
 
 
-  let keyDownHandler = function (e) {
+  let keyDownHandler = function(e) {
     if (e.keyCode === 39) {
       rightPressed = true;
     } else if (e.keyCode === 37) {
@@ -127,7 +137,7 @@
     }
   };
 
-  let keyUpHandler = function (e) {
+  let keyUpHandler = function(e) {
     if (e.keyCode === 39) {
       rightPressed = false;
     } else if (e.keyCode === 37) {
