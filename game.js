@@ -65,18 +65,30 @@
     ctx.closePath();
   };
 
-  let drawBricks = function () {
+  let brickInteractions = function (columnFunc, rowFunc) {
     bricks.map(function (c, columnIterator) {
-      let brickX = (columnIterator * (brickWidth + brickPadding)) + brickOffsetLeft;
+      columnFunc(c, columnIterator);
       c.map(function (r, rowIterator) {
-        let brickY = (rowIterator * (brickHeight + brickPadding)) + brickOffsetTop;
+        rowFunc(r, rowIterator);
+      });
+    });
+  };
+
+  let drawBricks = function () {
+    let brickX, brickY;
+    brickInteractions(
+      function (ignore, columnIterator) {
+        brickX = (columnIterator * (brickWidth + brickPadding)) + brickOffsetLeft;
+      },
+      function (r, rowIterator) {
+        brickY = (rowIterator * (brickHeight + brickPadding)) + brickOffsetTop;
         r.x = brickX;
         r.y = brickY;
         drawSomething(function () {
           ctx.rect(brickX, brickY, brickWidth, brickHeight);
         });
-      });
-    });
+      }
+    );
   };
 
   let drawBall = function () {
@@ -150,6 +162,7 @@
   document.addEventListener('keydown', keyDownHandler, false);
   document.addEventListener('keyup', keyUpHandler, false);
 
-  setInterval(draw, 10);
+  //setInterval(draw, 10);
+  draw();
 
 }());
