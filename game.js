@@ -1,5 +1,5 @@
-/*global alert*/
 /*jslint browser:true, white:true, es6:true, devel:true*/
+
 (function () {
 
   'use strict';
@@ -47,13 +47,13 @@
   bricks.map(function (i) {
     i.fill({
         x: 0,
-        y: 0
+        y: 0,
+        status: 1
       },
       0,
       brickRowCount
     );
   });
-
 
 
   let drawSomething = function (shapeFunc, color) {
@@ -65,28 +65,40 @@
     ctx.closePath();
   };
 
-  let brickInteractions = function (columnFunc, rowFunc) {
-    bricks.map(function (c, columnIterator) {
-      columnFunc(c, columnIterator);
-      c.map(function (r, rowIterator) {
-        rowFunc(r, rowIterator);
+  let brickInteractions = function (brickIterateFunc) {
+    bricks.map(function (c, columnIndex) {
+      c = c;
+      columnIndex = columnIndex;
+      c.map(function (r, rowIndex) {
+        return brickIterateFunc(c, columnIndex, r, rowIndex);
       });
     });
   };
 
+  // collisionDetection
+  let collisionDetection = function (b) {
+    if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
+      dy = -dy;
+      b.status = 0;
+    }
+  };
+
+  let b;
+
   let drawBricks = function () {
     let brickX, brickY;
     brickInteractions(
-      function (ignore, columnIterator) {
-        brickX = (columnIterator * (brickWidth + brickPadding)) + brickOffsetLeft;
-      },
-      function (r, rowIterator) {
-        brickY = (rowIterator * (brickHeight + brickPadding)) + brickOffsetTop;
-        r.x = brickX;
-        r.y = brickY;
-        drawSomething(function () {
-          ctx.rect(brickX, brickY, brickWidth, brickHeight);
-        });
+      function (ignore, columnIndex, r, rowIndex) {
+        b = r;
+        if (b.status === 1) {
+          brickX = (columnIndex * (brickWidth + brickPadding)) + brickOffsetLeft;
+          brickY = (rowIndex * (brickHeight + brickPadding)) + brickOffsetTop;
+          r.x = brickX;
+          r.y = brickY;
+          drawSomething(function () {
+            ctx.rect(brickX, brickY, brickWidth, brickHeight);
+          });
+        }
       }
     );
   };
@@ -102,7 +114,7 @@
   let drawPaddle = function () {
     drawSomething(
       function () {
-        ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+        return ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
       }
     );
   };
@@ -115,9 +127,11 @@
     drawBricks();
     drawBall();
     drawPaddle();
+    collisionDetection(b);
 
     x = xCoordPlusMotionRate;
     y = yCoordPlusMotionRate;
+
     if (xCoordPlusMotionRate > canvas.width - ballRadius || xCoordPlusMotionRate < ballRadius) {
       dx = -dx;
     }
@@ -139,9 +153,7 @@
     } else if (leftPressed && paddleX > 0) {
       paddleX -= 7;
     }
-
   };
-
 
   let keyDownHandler = function (e) {
     if (e.keyCode === 39) {
@@ -159,10 +171,16 @@
     }
   };
 
+
   document.addEventListener('keydown', keyDownHandler, false);
   document.addEventListener('keyup', keyUpHandler, false);
 
-  //setInterval(draw, 10);
-  draw();
+  setInterval(
+    function () {
+      draw();
+    },
+    5
+  );
+  //draw();
 
 }());
