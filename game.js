@@ -70,7 +70,7 @@
       c = c;
       columnIndex = columnIndex;
       c.map(function (r, rowIndex) {
-        return brickIterateFunc(c, columnIndex, r, rowIndex);
+        brickIterateFunc(c, columnIndex, r, rowIndex);
       });
     });
   };
@@ -89,8 +89,11 @@
     let brickX, brickY;
     brickInteractions(
       function (ignore, columnIndex, r, rowIndex) {
-        b = r;
+        b = bricks[columnIndex][rowIndex];
         if (b.status === 1) {
+          collisionDetection(b);
+        }
+        if (bricks[columnIndex][rowIndex].status === 1) {
           brickX = (columnIndex * (brickWidth + brickPadding)) + brickOffsetLeft;
           brickY = (rowIndex * (brickHeight + brickPadding)) + brickOffsetTop;
           r.x = brickX;
@@ -114,7 +117,7 @@
   let drawPaddle = function () {
     drawSomething(
       function () {
-        return ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+        ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
       }
     );
   };
@@ -127,7 +130,9 @@
     drawBricks();
     drawBall();
     drawPaddle();
-    collisionDetection(b);
+    // collisionDetection(c, columnIndex, r, rowIndex);
+
+    // collisionDetection(b);
 
     x = xCoordPlusMotionRate;
     y = yCoordPlusMotionRate;
@@ -179,7 +184,7 @@
     function () {
       draw();
     },
-    5
+    20
   );
   //draw();
 
