@@ -91,6 +91,7 @@
   };
   // collisionDetection
   let collisionDetection = function (b) {
+    console.log(b);
     if ((x > b.x) && (x < b.x + brickWidth) && (y > b.y) && (y < b.y + brickHeight)) {
       dy = -dy;
       b.status = 0;
@@ -98,20 +99,22 @@
   };
 
   let drawBricks = function () {
-    let brickX, brickY;
+    // let brickX, brickY;
     brickInteractions(
       function (ignore, columnIndex, r, rowIndex) {
         let b = bricks[columnIndex][rowIndex];
+
         if (b.status === 1) {
-          collisionDetection(b);
-          brickX = (columnIndex * (brickWidth + brickPadding)) + brickOffsetLeft;
-          brickY = (rowIndex * (brickHeight + brickPadding)) + brickOffsetTop;
+          let brickX = (columnIndex * (brickWidth + brickPadding)) + brickOffsetLeft;
+          let brickY = (rowIndex * (brickHeight + brickPadding)) + brickOffsetTop;
           r.x = brickX;
           r.y = brickY;
           drawSomething(function () {
             ctx.rect(brickX, brickY, brickWidth, brickHeight);
           });
         }
+        console.log(columnIndex, rowIndex);
+        collisionDetection(bricks[columnIndex][rowIndex]);
       });
   };
 
