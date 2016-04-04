@@ -1,4 +1,4 @@
-/*jslint browser:true, white:true, es6:true, devel:true*/
+/*jslint browser:true, white:true, es6:true*/
 
 (function () {
 
@@ -67,44 +67,12 @@
 
   let brickInteractions = function (brickIterateFunc) {
     bricks.map(function (c, columnIndex) {
-      c = c;
-      columnIndex = columnIndex;
       c.map(function (r, rowIndex) {
         brickIterateFunc(c, columnIndex, r, rowIndex);
       });
     });
   };
 
-  // collisionDetection
-  let collisionDetection = function (b) {
-    if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
-      dy = -dy;
-      b.status = 0;
-    }
-  };
-
-  let b;
-
-  let drawBricks = function () {
-    let brickX, brickY;
-    brickInteractions(
-      function (ignore, columnIndex, r, rowIndex) {
-        b = bricks[columnIndex][rowIndex];
-        if (b.status === 1) {
-          collisionDetection(b);
-        }
-        if (bricks[columnIndex][rowIndex].status === 1) {
-          brickX = (columnIndex * (brickWidth + brickPadding)) + brickOffsetLeft;
-          brickY = (rowIndex * (brickHeight + brickPadding)) + brickOffsetTop;
-          r.x = brickX;
-          r.y = brickY;
-          drawSomething(function () {
-            ctx.rect(brickX, brickY, brickWidth, brickHeight);
-          });
-        }
-      }
-    );
-  };
 
   let drawBall = function () {
     drawSomething(
@@ -121,6 +89,31 @@
       }
     );
   };
+  // collisionDetection
+  let collisionDetection = function (b) {
+    if ((x > b.x) && (x < b.x + brickWidth) && (y > b.y) && (y < b.y + brickHeight)) {
+      dy = -dy;
+      b.status = 0;
+    }
+  };
+
+  let drawBricks = function () {
+    let brickX, brickY;
+    brickInteractions(
+      function (ignore, columnIndex, r, rowIndex) {
+        let b = bricks[columnIndex][rowIndex];
+        if (b.status === 1) {
+          collisionDetection(b);
+          brickX = (columnIndex * (brickWidth + brickPadding)) + brickOffsetLeft;
+          brickY = (rowIndex * (brickHeight + brickPadding)) + brickOffsetTop;
+          r.x = brickX;
+          r.y = brickY;
+          drawSomething(function () {
+            ctx.rect(brickX, brickY, brickWidth, brickHeight);
+          });
+        }
+      });
+  };
 
   let draw = function () {
     let xCoordPlusMotionRate = x + dx;
@@ -130,9 +123,6 @@
     drawBricks();
     drawBall();
     drawPaddle();
-    // collisionDetection(c, columnIndex, r, rowIndex);
-
-    // collisionDetection(b);
 
     x = xCoordPlusMotionRate;
     y = yCoordPlusMotionRate;
@@ -184,7 +174,7 @@
     function () {
       draw();
     },
-    20
+    10
   );
   //draw();
 
