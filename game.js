@@ -34,27 +34,24 @@
   let brickOffsetTop = 30;
   let brickOffsetLeft = 30;
   let bricks = [];
+  // bricks.splice(brickColumnCount);
+  // bricks.map(function (i) {
+  //   i = [];
+  //   return i;
+  // });
+
   // set length of column array
-  bricks.length = brickColumnCount;
-  bricks.fill(
-    [],
-    0,
-    brickColumnCount
-  );
-
   // set length of row array
-  bricks[0].length = brickRowCount;
+  // set length to columns * rows
+  bricks.length = (brickColumnCount * brickRowCount);
   bricks.map(function (i) {
-    i.fill({
-        x: 0,
-        y: 0,
-        status: 1
-      },
-      0,
-      brickRowCount
-    );
+    i = {
+      x: 0,
+      y: 0,
+      status: 1
+    };
+    return i;
   });
-
 
   let drawSomething = function (shapeFunc, color) {
     color = color || "#0095dd";
@@ -73,7 +70,6 @@
     });
   };
 
-
   let drawBall = function () {
     drawSomething(
       function () {
@@ -89,21 +85,20 @@
       }
     );
   };
+
   // collisionDetection
   let collisionDetection = function (b) {
-    console.log(b);
     if ((x > b.x) && (x < b.x + brickWidth) && (y > b.y) && (y < b.y + brickHeight)) {
       dy = -dy;
       b.status = 0;
+      return b;
     }
   };
 
   let drawBricks = function () {
-    // let brickX, brickY;
     brickInteractions(
       function (ignore, columnIndex, r, rowIndex) {
         let b = bricks[columnIndex][rowIndex];
-
         if (b.status === 1) {
           let brickX = (columnIndex * (brickWidth + brickPadding)) + brickOffsetLeft;
           let brickY = (rowIndex * (brickHeight + brickPadding)) + brickOffsetTop;
@@ -112,10 +107,10 @@
           drawSomething(function () {
             ctx.rect(brickX, brickY, brickWidth, brickHeight);
           });
+          collisionDetection(b);
         }
-        console.log(columnIndex, rowIndex);
-        collisionDetection(bricks[columnIndex][rowIndex]);
-      });
+      }
+    );
   };
 
   let draw = function () {
