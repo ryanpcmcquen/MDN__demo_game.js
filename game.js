@@ -34,15 +34,7 @@
   let brickOffsetTop = 30;
   let brickOffsetLeft = 30;
   let bricks = [];
-  // bricks.splice(brickColumnCount);
-  // bricks.map(function (i) {
-  //   i = [];
-  //   return i;
-  // });
 
-  // set length of column array
-  // set length of row array
-  // set length to columns * rows
   bricks.length = (brickColumnCount * brickRowCount);
   bricks.map(function (i) {
     i = {
@@ -63,10 +55,8 @@
   };
 
   let brickInteractions = function (brickIterateFunc) {
-    bricks.map(function (c, columnIndex) {
-      c.map(function (r, rowIndex) {
-        brickIterateFunc(c, columnIndex, r, rowIndex);
-      });
+    bricks.map(function (brickValue, brickIndex) {
+      brickIterateFunc(brickValue, brickIndex);
     });
   };
 
@@ -95,22 +85,27 @@
     }
   };
 
+  console.log(bricks, bricks.length);
   let drawBricks = function () {
-    brickInteractions(
-      function (ignore, columnIndex, r, rowIndex) {
-        let b = bricks[columnIndex][rowIndex];
-        if (b.status === 1) {
-          let brickX = (columnIndex * (brickWidth + brickPadding)) + brickOffsetLeft;
-          let brickY = (rowIndex * (brickHeight + brickPadding)) + brickOffsetTop;
-          r.x = brickX;
-          r.y = brickY;
-          drawSomething(function () {
-            ctx.rect(brickX, brickY, brickWidth, brickHeight);
-          });
-          collisionDetection(b);
-        }
+    // brickInteractions(
+    // function (brickValue, brickIndex) {
+    bricks.map(function (brickValue, brickIndex) {
+      let b = brickValue;
+      console.log(b);
+      if (b.status === 1) {
+        let columnIndex = Math.floor(brickIndex / brickRowCount);
+        let rowIndex = Math.floor(brickIndex / brickColumnCount);
+        console.log(columnIndex, rowIndex);
+        let brickX = (columnIndex * (brickWidth + brickPadding)) + brickOffsetLeft;
+        let brickY = (rowIndex * (brickHeight + brickPadding)) + brickOffsetTop;
+        b.x = brickX;
+        b.y = brickY;
+        drawSomething(function () {
+          ctx.rect(brickX, brickY, brickWidth, brickHeight);
+        });
+        collisionDetection(b);
       }
-    );
+    });
   };
 
   let draw = function () {
