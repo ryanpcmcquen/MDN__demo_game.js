@@ -1,4 +1,4 @@
-/*jslint browser:true, white:true, es6:true*/
+/*jshint esversion:6*/
 
 (() => {
 
@@ -61,7 +61,6 @@
       });
     });
   };
-
 
   const drawBall = () => {
     drawSomething(
