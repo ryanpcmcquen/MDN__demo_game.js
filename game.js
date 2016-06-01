@@ -97,7 +97,7 @@
     ctx.font = "16px Georgia";
     ctx.fillStyle = mainColor;
     ctx.fillText("Score: " + score, 8, 20);
-  }
+  };
 
   const drawBricks = () => {
     brickInteractions(
