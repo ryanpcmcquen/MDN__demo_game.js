@@ -1,31 +1,31 @@
 /*jslint browser:true, white:true, es6:true*/
 
-(function () {
+(() => {
 
   'use strict';
 
-  let canvas = document.getElementById("myCanvas");
-  let ctx = canvas.getContext("2d");
+  const canvas = document.getElementById("myCanvas");
+  const ctx = canvas.getContext("2d");
 
-  // coordinates
+  // Coordinates!
   let x = canvas.width / 2;
   let y = canvas.height - 20;
   let dx = 2;
   let dy = -2;
 
-  // ball stuff
+  // Ball stuff.
   let ballRadius = 10;
 
-  // paddle stuff
+  // Paddle stuff.
   let paddleHeight = 10;
   let paddleWidth = 75;
   let paddleX = (canvas.width - paddleWidth) / 2;
 
-  // control stuff
+  // Control stuff.
   let rightPressed = false;
   let leftPressed = false;
 
-  // bricks!
+  // Bricks!
   let brickRowCount = 3;
   let brickColumnCount = 5;
   let brickWidth = 75;
@@ -33,30 +33,20 @@
   let brickPadding = 10;
   let brickOffsetTop = 30;
   let brickOffsetLeft = 30;
-  let bricks = [];
-  // set length of column array
-  bricks.length = brickColumnCount;
-  bricks.fill(
-    [],
-    0,
-    brickColumnCount
-  );
 
-  // set length of row array
-  bricks[0].length = brickRowCount;
-  bricks.map(function (i) {
-    i.fill({
+  const bricks = [];
+  // Set length of column array.
+  while (bricks.push([]) < brickColumnCount);
+
+  bricks.map((ignore, i) => {
+    while (bricks[i].push({
         x: 0,
         y: 0,
         status: 1
-      },
-      0,
-      brickRowCount
-    );
+      }) < brickRowCount);
   });
 
-
-  let drawSomething = function (shapeFunc, color) {
+  const drawSomething = (shapeFunc, color) => {
     color = color || "#0095dd";
     ctx.beginPath();
     shapeFunc();
@@ -65,64 +55,58 @@
     ctx.closePath();
   };
 
-  let brickInteractions = function (brickIterateFunc) {
-    bricks.map(function (c, columnIndex) {
-      c.map(function (r, rowIndex) {
+  const brickInteractions = (brickIterateFunc) => {
+    bricks.map((c, columnIndex) => {
+      c.map((r, rowIndex) => {
         brickIterateFunc(c, columnIndex, r, rowIndex);
       });
     });
   };
 
 
-  let drawBall = function () {
+  const drawBall = () => {
     drawSomething(
-      function () {
+      () => {
         ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
       }
     );
   };
 
-  let drawPaddle = function () {
+  const drawPaddle = () => {
     drawSomething(
-      function () {
+      () => {
         ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
       }
     );
   };
-  // collisionDetection
-  let collisionDetection = function (b) {
-    console.log(b);
+
+  const collisionDetection = (b) => {
     if ((x > b.x) && (x < b.x + brickWidth) && (y > b.y) && (y < b.y + brickHeight)) {
       dy = -dy;
       b.status = 0;
     }
   };
 
-  let drawBricks = function () {
-    // let brickX, brickY;
+  const drawBricks = () => {
     brickInteractions(
-      function (ignore, columnIndex, r, rowIndex) {
+      (ignore, columnIndex, r, rowIndex) => {
         let b = bricks[columnIndex][rowIndex];
         if (b.status === 1) {
-
           let brickX = (columnIndex * (brickWidth + brickPadding)) + brickOffsetLeft;
           let brickY = (rowIndex * (brickHeight + brickPadding)) + brickOffsetTop;
           r.x = brickX;
           r.y = brickY;
-          drawSomething(function () {
+          drawSomething(() => {
             ctx.rect(brickX, brickY, brickWidth, brickHeight);
           });
-          console.log(columnIndex, rowIndex);
           collisionDetection(bricks[columnIndex][rowIndex]);
         }
-
-
       });
   };
 
-  let draw = function () {
-    let xCoordPlusMotionRate = x + dx;
-    let yCoordPlusMotionRate = y + dy;
+  const draw = () => {
+    const xCoordPlusMotionRate = x + dx;
+    const yCoordPlusMotionRate = y + dy;
     // this clears the frame
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBricks();
@@ -142,12 +126,11 @@
         dy = -dy;
       } else {
         document.body.innerHTML = "<h1 style='text-align: center;'>GAME OVER</h1>";
-        setTimeout(function () {
+        setTimeout(() => {
           document.location.reload();
         }, 700);
       }
     }
-
     if (rightPressed && paddleX < canvas.width - paddleWidth) {
       paddleX += 7;
     } else if (leftPressed && paddleX > 0) {
@@ -155,7 +138,7 @@
     }
   };
 
-  let keyDownHandler = function (e) {
+  const keyDownHandler = (e) => {
     if (e.keyCode === 39) {
       rightPressed = true;
     } else if (e.keyCode === 37) {
@@ -163,7 +146,7 @@
     }
   };
 
-  let keyUpHandler = function (e) {
+  const keyUpHandler = (e) => {
     if (e.keyCode === 39) {
       rightPressed = false;
     } else if (e.keyCode === 37) {
@@ -176,11 +159,11 @@
   document.addEventListener('keyup', keyUpHandler, false);
 
   setInterval(
-    function () {
+    () => {
       draw();
     },
     10
   );
   //draw();
 
-}());
+})();
