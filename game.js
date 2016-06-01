@@ -7,6 +7,8 @@
   const canvas = document.getElementById("myCanvas");
   const ctx = canvas.getContext("2d");
 
+  const mainColor = "#0095dd";
+
   // Coordinates!
   let x = canvas.width / 2;
   let y = canvas.height - 20;
@@ -46,7 +48,7 @@
   });
 
   const drawSomething = (shapeFunc, color) => {
-    color = color || "#0095dd";
+    color = color || mainColor;
     ctx.beginPath();
     shapeFunc();
     ctx.fillStyle = color;
@@ -82,8 +84,20 @@
     if ((x > b.x) && (x < b.x + brickWidth) && (y > b.y) && (y < b.y + brickHeight)) {
       dy = -dy;
       b.status = 0;
+      score = score + 1;
+      if (score === brickRowCount * brickColumnCount) {
+        alert("You won!");
+        document.location.reload();
+      }
     }
   };
+
+  let score = 0;
+  const drawScore = () => {
+    ctx.font = "16px Georgia";
+    ctx.fillStyle = mainColor;
+    ctx.fillText("Score: " + score, 8, 20);
+  }
 
   const drawBricks = () => {
     brickInteractions(
@@ -105,11 +119,12 @@
   const draw = () => {
     const xCoordPlusMotionRate = x + dx;
     const yCoordPlusMotionRate = y + dy;
-    // this clears the frame
+    // This clears the frame.
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBricks();
     drawBall();
     drawPaddle();
+    drawScore();
 
     x = xCoordPlusMotionRate;
     y = yCoordPlusMotionRate;
