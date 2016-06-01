@@ -35,9 +35,8 @@
   let brickOffsetLeft = 30;
 
   const bricks = [];
-  // Set length of column array.
+  // Construct the 2D array:
   while (bricks.push([]) < brickColumnCount);
-
   bricks.map((ignore, i) => {
     while (bricks[i].push({
         x: 0,
