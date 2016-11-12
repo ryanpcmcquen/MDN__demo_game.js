@@ -1,5 +1,4 @@
 /*jshint esversion:6*/
-
 (() => {
 
   'use strict';
@@ -79,26 +78,30 @@
   const drawPaddle = () => {
     drawSomething(
       () => {
-        ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+        ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth,
+          paddleHeight);
       }
     );
   };
 
   const drawScore = () => {
-    ctx.font = "16px Georgia";
-    ctx.fillStyle = mainColor;
     ctx.fillText("Score: " + score, 8, 20);
   };
 
   const drawLives = () => {
-    ctx.font = "16px Georgia";
-    ctx.fillStyle = mainColor;
     ctx.fillText("Lives: " + lives, canvas.width - 65, 20);
   };
 
+  const drawHud = () => {
+    ctx.font = "16px Georgia";
+    ctx.fillStyle = mainColor;
+    drawScore();
+    drawLives();
+  };
 
   const collisionDetection = (b) => {
-    if ((x > b.x) && (x < b.x + brickWidth) && (y > b.y) && (y < b.y + brickHeight)) {
+    if ((x > b.x) && (x < b.x + brickWidth) && (y > b.y) && (y < b.y +
+        brickHeight)) {
       dy = -dy;
       b.status = 0;
       score = score + 1;
@@ -114,8 +117,10 @@
       (ignore, columnIndex, r, rowIndex) => {
         let b = bricks[columnIndex][rowIndex];
         if (b.status === 1) {
-          let brickX = (columnIndex * (brickWidth + brickPadding)) + brickOffsetLeft;
-          let brickY = (rowIndex * (brickHeight + brickPadding)) + brickOffsetTop;
+          let brickX = (columnIndex * (brickWidth + brickPadding)) +
+            brickOffsetLeft;
+          let brickY = (rowIndex * (brickHeight + brickPadding)) +
+            brickOffsetTop;
           r.x = brickX;
           r.y = brickY;
           drawSomething(() => {
@@ -129,18 +134,18 @@
   const draw = () => {
     const xCoordPlusMotionRate = x + dx;
     const yCoordPlusMotionRate = y + dy;
-    // This clears the frame.
+    // This clears the frame:
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBricks();
     drawBall();
     drawPaddle();
-    drawScore();
-    drawLives();
+    drawHud();
 
     x = xCoordPlusMotionRate;
     y = yCoordPlusMotionRate;
 
-    if (xCoordPlusMotionRate > canvas.width - ballRadius || xCoordPlusMotionRate < ballRadius) {
+    if (xCoordPlusMotionRate > canvas.width - ballRadius ||
+      xCoordPlusMotionRate < ballRadius) {
       dx = -dx;
     }
     if (yCoordPlusMotionRate < ballRadius) {
@@ -151,7 +156,8 @@
       } else {
         lives = lives - 1;
         if (!lives) {
-          document.body.innerHTML = "<h1 style='text-align: center;'>GAME OVER</h1>";
+          document.body.innerHTML =
+            "<h1 style='text-align: center;'>GAME OVER</h1>";
           setTimeout(() => {
             document.location.reload();
           }, 700);
@@ -172,22 +178,21 @@
     requestAnimationFrame(draw);
   };
 
-  const keyDownHandler = (e) => {
-    if (e.keyCode === 39) {
+  const keyDownHandler = (event) => {
+    if (event.keyCode === 39) {
       rightPressed = true;
-    } else if (e.keyCode === 37) {
+    } else if (event.keyCode === 37) {
       leftPressed = true;
     }
   };
 
-  const keyUpHandler = (e) => {
-    if (e.keyCode === 39) {
+  const keyUpHandler = (event) => {
+    if (event.keyCode === 39) {
       rightPressed = false;
-    } else if (e.keyCode === 37) {
+    } else if (event.keyCode === 37) {
       leftPressed = false;
     }
   };
-
 
   const mouseMoveHandler = (event) => {
     let relativeX = event.clientX - canvas.offsetLeft;
@@ -196,10 +201,8 @@
     }
   };
 
-
   document.addEventListener('keydown', keyDownHandler, false);
   document.addEventListener('keyup', keyUpHandler, false);
-
   document.addEventListener('mousemove', mouseMoveHandler, false);
 
   draw();
