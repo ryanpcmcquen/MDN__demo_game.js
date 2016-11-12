@@ -9,6 +9,10 @@
 
   const mainColor = "#0095dd";
 
+  // Player stuff:
+  let score = 0;
+  let lives = 3;
+
   // Coordinates!
   let x = canvas.width / 2;
   let y = canvas.height - 20;
@@ -80,6 +84,19 @@
     );
   };
 
+  const drawScore = () => {
+    ctx.font = "16px Georgia";
+    ctx.fillStyle = mainColor;
+    ctx.fillText("Score: " + score, 8, 20);
+  };
+
+  const drawLives = () => {
+    ctx.font = "16px Georgia";
+    ctx.fillStyle = mainColor;
+    ctx.fillText("Lives: " + lives, canvas.width - 65, 20);
+  };
+
+
   const collisionDetection = (b) => {
     if ((x > b.x) && (x < b.x + brickWidth) && (y > b.y) && (y < b.y + brickHeight)) {
       dy = -dy;
@@ -90,13 +107,6 @@
         document.location.reload();
       }
     }
-  };
-
-  let score = 0;
-  const drawScore = () => {
-    ctx.font = "16px Georgia";
-    ctx.fillStyle = mainColor;
-    ctx.fillText("Score: " + score, 8, 20);
   };
 
   const drawBricks = () => {
@@ -125,6 +135,7 @@
     drawBall();
     drawPaddle();
     drawScore();
+    drawLives();
 
     x = xCoordPlusMotionRate;
     y = yCoordPlusMotionRate;
@@ -138,10 +149,19 @@
       if (x > paddleX && x < paddleX + paddleWidth) {
         dy = -dy;
       } else {
-        document.body.innerHTML = "<h1 style='text-align: center;'>GAME OVER</h1>";
-        setTimeout(() => {
-          document.location.reload();
-        }, 700);
+        lives = lives - 1;
+        if (!lives) {
+          document.body.innerHTML = "<h1 style='text-align: center;'>GAME OVER</h1>";
+          setTimeout(() => {
+            document.location.reload();
+          }, 700);
+        } else {
+          x = canvas.width / 2;
+          y = canvas.height - 30;
+          dx = 2;
+          dy = -2;
+          paddleX = (canvas.width - paddleWidth) / 2;
+        }
       }
     }
     if (rightPressed && paddleX < canvas.width - paddleWidth) {
@@ -149,6 +169,7 @@
     } else if (leftPressed && paddleX > 0) {
       paddleX -= 7;
     }
+    requestAnimationFrame(draw);
   };
 
   const keyDownHandler = (e) => {
@@ -168,15 +189,19 @@
   };
 
 
+  const mouseMoveHandler = (event) => {
+    let relativeX = event.clientX - canvas.offsetLeft;
+    if (relativeX > 0 && relativeX < canvas.width) {
+      paddleX = relativeX - paddleWidth / 2;
+    }
+  };
+
+
   document.addEventListener('keydown', keyDownHandler, false);
   document.addEventListener('keyup', keyUpHandler, false);
 
-  setInterval(
-    () => {
-      draw();
-    },
-    10
-  );
-  //draw();
+  document.addEventListener('mousemove', mouseMoveHandler, false);
+
+  draw();
 
 })();
