@@ -41,14 +41,18 @@
 
   const bricks = [];
   // Construct the 2D array:
-  //while (bricks.push([]) < brickColumnCount);
   bricks.fill([], 0, brickColumnCount);
   bricks.map((ignore, i) => {
-    while (bricks[i].push({
-        x: 0,
-        y: 0,
-        status: 1
-      }) < brickRowCount);
+    //     while (bricks[i].push({
+    //         x: 0,
+    //         y: 0,
+    //         status: 1
+    //       }) < brickRowCount);
+    bricks[i].fill({
+      x: 0,
+      y: 0,
+      status: 1
+    }), 0, brickRowCount);
   });
 
   const drawSomething = (shapeFunc, color) => {
