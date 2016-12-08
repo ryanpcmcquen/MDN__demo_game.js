@@ -41,7 +41,8 @@
 
   const bricks = [];
   // Construct the 2D array:
-  while (bricks.push([]) < brickColumnCount);
+  //while (bricks.push([]) < brickColumnCount);
+  bricks.fill([], 0, brickColumnCount);
   bricks.map((ignore, i) => {
     while (bricks[i].push({
         x: 0,
