@@ -43,18 +43,13 @@ requestAnimationFrame
 
   const bricks = []
   // Construct the 2D array:
-  bricks.fill([], 0, brickColumnCount)
+  while (bricks.push([]) < brickColumnCount) {}
   bricks.map((ignore, i) => {
-    //     while (bricks[i].push({
-    //         x: 0,
-    //         y: 0,
-    //         status: 1
-    //       }) < brickRowCount);
-    bricks[i].fill({
+    while (bricks[i].push({
       x: 0,
       y: 0,
       status: 1
-    }, 0, brickRowCount)
+    }) < brickRowCount) {}
   })
 
   const drawSomething = (shapeFunc, color) => {
