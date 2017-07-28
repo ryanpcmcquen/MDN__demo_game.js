@@ -42,10 +42,7 @@ requestAnimationFrame
     let brickOffsetTop = 30
     let brickOffsetLeft = 30
 
-    //const bricks = []
     // Construct the 2D array:
-    //while (bricks.push([]) < brickColumnCount) {}
-    //bricks.length = brickColumnCount
     const bricks = Array(brickColumnCount).fill().map(() => {
         return []
     })
