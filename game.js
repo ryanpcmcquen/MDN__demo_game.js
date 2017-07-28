@@ -1,4 +1,5 @@
-/* global
+/*
+global
 alert,
 requestAnimationFrame
 */
@@ -41,23 +42,15 @@ requestAnimationFrame
     let brickOffsetTop = 30
     let brickOffsetLeft = 30
 
-    const bricks = []
+    //const bricks = []
     // Construct the 2D array:
     //while (bricks.push([]) < brickColumnCount) {}
-    bricks.length = brickColumnCount
-    bricks.fill().map(() => {
+    //bricks.length = brickColumnCount
+    const bricks = Array(brickColumnCount).fill().map(() => {
         return []
     })
     bricks.map((ignore, i) => {
-        bricks[i].length = brickRowCount
-        /*
-        while (bricks[i].push({
-                x: 0,
-                y: 0,
-                status: 1
-        }) < brickRowCount) {}
-        */
-        bricks[i].fill().map(() => {
+        bricks[i] = Array(brickRowCount).fill().map(() => {
             return {
                 x: 0,
                 y: 0,
