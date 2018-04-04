@@ -45,8 +45,7 @@ requestAnimationFrame
     // Construct the 2D array:
     const bricks = Array(brickColumnCount).fill().map(() => {
         return []
-    })
-    bricks.map((ignore, i) => {
+    }).map((ignore, i) => {
         bricks[i] = Array(brickRowCount).fill().map(() => {
             return {
                 x: 0,
