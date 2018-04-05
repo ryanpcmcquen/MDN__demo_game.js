@@ -45,7 +45,8 @@ requestAnimationFrame
     // Construct the 2D array:
     const bricks = Array(brickColumnCount).fill().map(() => {
         return []
-    }).map((ignore, i) => {
+    })
+    bricks.forEach((ignore, i) => {
         bricks[i] = Array(brickRowCount).fill().map(() => {
             return {
                 x: 0,
@@ -65,8 +66,8 @@ requestAnimationFrame
     }
 
     const brickInteractions = (brickIterateFunc) => {
-        bricks.map((c, columnIndex) => {
-            c.map((r, rowIndex) => {
+        bricks.forEach((c, columnIndex) => {
+            c.forEach((r, rowIndex) => {
                 brickIterateFunc(c, columnIndex, r, rowIndex)
             })
         })
